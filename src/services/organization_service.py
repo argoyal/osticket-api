@@ -63,7 +63,7 @@ class OrganizationService(object):
             org_id = cur.fetchone().get("id")
             cur.close()
 
-            return {"organizatoin_id": org_id}
+            return {"organization_id": org_id}
 
         query_template = """
             START TRANSACTION;

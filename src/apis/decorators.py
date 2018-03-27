@@ -34,4 +34,6 @@ def private(func):
 
         return func(*args, **kwargs)
 
+    wrapper.__name__ = func.__name__
+
     return wrapper
