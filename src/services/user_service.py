@@ -75,7 +75,7 @@ class UserService(object):
         data = cur.fetchone()
 
         if not data:
-            raise ServiceException('No user exists')
+            return data
 
         for field in EXCLUDE_FIELDS:
             data.pop(field)
@@ -106,8 +106,8 @@ class UserService(object):
             db.rollback()
             raise ServiceException(exc.message)
 
-    def create_user(self, email, name, password, org_id, phone='',
-                    username=''):
+    def add_user(self, email, name, password, org_id, phone='',
+                 username=''):
         """
         adding user to the database
         ===============================================================
@@ -136,7 +136,12 @@ class UserService(object):
             user_id = cur.fetchone().get("user_id")
             cur.close()
 
-            return user_id
+            return {"user_id": user_id}
+
+        user_data = self.get_user(email=email)
+
+        if user_data:
+            raise ServiceException('User with this email already exists')
 
         username = username or email
         hashed_password = hasher.hash_password(password)

@@ -30,6 +30,10 @@ class OrganizationService(object):
         return row
 
     def organization_exists(self, org_id):
+        """
+        checks for the existance of an organization
+        """
+
         query_template = """
             SELECT EXISTS (SELECT 1 from ost_organization WHERE id=%s)
         """
@@ -59,7 +63,7 @@ class OrganizationService(object):
             org_id = cur.fetchone().get("id")
             cur.close()
 
-            return org_id
+            return {"organizatoin_id": org_id}
 
         query_template = """
             START TRANSACTION;

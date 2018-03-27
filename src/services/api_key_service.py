@@ -115,8 +115,8 @@ class APIKeyService(object):
         if not data:
             return False
 
-        if not data.get("ipaddr") == ip_address:
-            return False
+        # if not data.get("ipaddr") == ip_address:
+        #     return False
 
         if not data.get("isactive") == 1:
             return False
