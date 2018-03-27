@@ -1,0 +1,56 @@
+# A local only docker-compose file.. loads basic settings from local.env
+# test server settings are totally different and it does not use this
+# docker compose file
+
+version: '2'
+
+services:
+
+  # database mysql
+  db:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - /Users/arpitgoyal/data/osticket:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      local.env
+
+  # helpdesk service
+  helpdesk:
+    image: campbellsoftwaresolutions/osticket
+    restart: always
+    ports:
+      - "8080:80"
+    env_file:
+      local.env
+    depends_on:
+      - db
+
+  # flask api layer for directly adding
+  # users to the database for support access
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: osticket-api
+    env_file:
+      local.env
+    command: >
+      /bin/ash -c "
+        while ! nc -z db 3306;
+        do
+          echo sleeping for database;
+          sleep 1;
+        done;
+
+        flask run --host=0.0.0.0
+      "
+    volumes:
+      - ./src/:/code
+      - ./logs:/var/log
+    ports:
+      - "8085:5000"
+    depends_on:
+      - db
