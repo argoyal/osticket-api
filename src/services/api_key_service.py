@@ -79,12 +79,12 @@ class APIKeyService(object):
         """
 
         query_template = """
-            UPDATE ost_api_key SET isactive=0, updated={} WHERE apikey={}
+            UPDATE ost_api_key SET isactive=0, updated=%s WHERE apikey=%s
         """
 
         cur = db.cursor()
 
-        cur.execute(query_template.format(datetime.now(), api_key))
+        cur.execute(query_template, (datetime.now(), api_key))
 
         cur.close()
 
