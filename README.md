@@ -1,5 +1,3 @@
-**
-
 ## OSTicket API
 
 OSTicket is an open source ticketing platform with all the mature functionalities for a ticketing system. Although the system does not expose certain API's as of yet to support interaction with an external application.
